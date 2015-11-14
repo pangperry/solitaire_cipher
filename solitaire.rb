@@ -6,19 +6,30 @@ class Solitaire
   end
 
   def encrypt_message(message)
-    prepare(message) #returns a prepared message(grouped, nested arrays with X's
+   cleaned_message =  prepare(message)
+   converted_message = convert_message(cleaned_message)
+   keystream_message = generate_keystream_message(cleaned_message,deck)
+   converted_keystream = convert_message(keystream_message)
+   puts "keystream: #{keystream}"
+   added_messages = add_message_numbers(converted_message, converted_keystream)
+   convert_characters(added_messages)
+  end
+
+  def decrypt_message
+   converted_message = convert_message(cleaned_message)
+   keystream_message = generate_keystream_message(cleaned_message,deck)
+   converted_keystream = convert_message(keystream_message)
+   puts "keystream: #{keystream}"
+   added_messages = add_message_numbers(converted_message, converted_keystream)
   end
 
   def convert_message(grouped_message)
     convert_characters(grouped_message)
   end
 
-  def generate_keystream(message)
-    prepare_message(message) # need to create the keystream functionality but this will still return an array of arrays of letters
-  end
-
   def add_message_numbers(message_numbers, keystream_numbers)
-    [message_numbers.flatten, keystream_numbers.flatten].transpose.map {|x| x.reduce(:+) } #better way?
+    added = [message_numbers.flatten, keystream_numbers.flatten].transpose.map {|x| x.reduce(:+) }
+    (added.map {|num| num>26 ? num - 26: num }).each_slice(5).to_a
   end
 
   def convert_characters(grouped_message)
@@ -31,9 +42,8 @@ class Solitaire
   end
 
   def prepare(message)
-    grouped_with_caps =
-      substitute_chars(message).chars.each_slice(5).to_a
-    add_x(grouped_with_caps)
+    grouped_caps = substitute_chars(message).chars.each_slice(5).to_a
+    add_x(grouped_caps)
   end
 
   def substitute_chars(message)
