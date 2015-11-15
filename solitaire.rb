@@ -2,7 +2,7 @@ class Solitaire
   attr_reader :deck
 
   def initialize
-    @deck = build_deck
+    @deck = build_deck.shuffle!
   end
 
   def encrypt_message(message)
@@ -12,16 +12,17 @@ class Solitaire
     keystream_message = generate_keystream_message(cleaned_message,key)
     converted_keystream = convert_message(keystream_message)
     added_messages = add_message_numbers(converted_message, converted_keystream) #this is the difference between encrypt and decrypt
-    convert_characters(added_messages)
+    convert_characters(added_messages).map(&:join).join(' ')
   end
 
   def decrypt_message(message)
     key = @deck.dup
-    converted_message = convert_message(message)
-    keystream_message = generate_keystream_message(message,key)
+    cleaned_message =  prepare(message)
+    converted_message = convert_message(cleaned_message)
+    keystream_message = generate_keystream_message(cleaned_message,key)
     converted_keystream = convert_message(keystream_message)
     messages_subtracted = subtract_message_numbers(converted_message, converted_keystream) #this is the difference between encrypt and decrypt
-    convert_characters(messages_subtracted)
+    convert_characters(messages_subtracted).map(&:join).join(' ')
   end
 
   def subtract_message_numbers(message_numbers, keystream_numbers)
