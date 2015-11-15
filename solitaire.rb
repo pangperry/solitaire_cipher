@@ -1,26 +1,34 @@
 class Solitaire
-  attr_accessor :deck
+  attr_reader :deck
 
   def initialize
     @deck = build_deck
   end
 
   def encrypt_message(message)
-   cleaned_message =  prepare(message)
-   converted_message = convert_message(cleaned_message)
-   keystream_message = generate_keystream_message(cleaned_message,deck)
-   converted_keystream = convert_message(keystream_message)
-   puts "keystream: #{keystream}"
-   added_messages = add_message_numbers(converted_message, converted_keystream)
-   convert_characters(added_messages)
+    key = @deck.dup
+    cleaned_message =  prepare(message)
+    converted_message = convert_message(cleaned_message)
+    keystream_message = generate_keystream_message(cleaned_message,key)
+    converted_keystream = convert_message(keystream_message)
+    added_messages = add_message_numbers(converted_message, converted_keystream) #this is the difference between encrypt and decrypt
+    convert_characters(added_messages)
   end
 
-  def decrypt_message
-   converted_message = convert_message(cleaned_message)
-   keystream_message = generate_keystream_message(cleaned_message,deck)
-   converted_keystream = convert_message(keystream_message)
-   puts "keystream: #{keystream}"
-   added_messages = add_message_numbers(converted_message, converted_keystream)
+  def decrypt_message(message)
+    key = @deck.dup
+    converted_message = convert_message(message)
+    keystream_message = generate_keystream_message(message,key)
+    converted_keystream = convert_message(keystream_message)
+    messages_subtracted = subtract_message_numbers(converted_message, converted_keystream) #this is the difference between encrypt and decrypt
+    convert_characters(messages_subtracted)
+  end
+
+  def subtract_message_numbers(message_numbers, keystream_numbers)
+    subtracted = keystream_numbers.flatten.zip(message_numbers.flatten).map do |x, y|
+      y <= x ? (y + 26) - x : y - x
+    end
+    subtracted.each_slice(5).to_a
   end
 
   def convert_message(grouped_message)
@@ -69,7 +77,7 @@ class Solitaire
     move_joker_a(deck)
     move_joker_b(deck)
     triple_cut(deck)
-    @deck = count_cut(deck)
+    count_cut(deck)
     card_value(deck.first) == "joker" ? move_jokers_and_cut_deck(deck) : deck.first
   end
 
