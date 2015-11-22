@@ -6,6 +6,10 @@ class Solitaire
     @key = []
   end
 
+  def key_deck
+    @key = @deck.shuffle!
+  end
+
   def encrypt_message(message)
     @key = @deck.dup
     cleaned_message =  prepare(message)
