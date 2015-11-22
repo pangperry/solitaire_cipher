@@ -2,24 +2,25 @@ class Solitaire
   attr_reader :deck
 
   def initialize
-    @deck = build_deck.shuffle!
+    @deck = build_deck
+    @key = []
   end
 
   def encrypt_message(message)
-    key = @deck.dup
+    @key = @deck.dup
     cleaned_message =  prepare(message)
     converted_message = convert_message(cleaned_message)
-    keystream_message = generate_keystream_message(cleaned_message,key)
+    keystream_message = generate_keystream_message(cleaned_message)
     converted_keystream = convert_message(keystream_message)
     added_messages = add_message_numbers(converted_message, converted_keystream)
     convert_characters(added_messages).map(&:join).join(' ')
   end
 
   def decrypt_message(message)
-    key = @deck.dup
+    @key = @deck.dup
     cleaned_message =  prepare(message)
     converted_message = convert_message(cleaned_message)
-    keystream_message = generate_keystream_message(cleaned_message,key)
+    keystream_message = generate_keystream_message(cleaned_message)
     converted_keystream = convert_message(keystream_message)
     messages_subtracted = subtract_message_numbers(converted_message, converted_keystream)
     convert_characters(messages_subtracted).map(&:join).join(' ')
@@ -66,28 +67,32 @@ class Solitaire
     grouped_message
   end
 
-  def generate_keystream_message(prepared_message,deck)
-    keystream_message = prepared_message.map {|group| group.map {|letter| gen_keystream_letter(letter, deck) }}
+  def generate_keystream_message(prepared_message)
+    keystream_message = prepared_message.map {|group| group.map {|letter| gen_keystream_letter(letter) }}
   end
 
-  def gen_keystream_letter(letter, deck)
-    number = move_jokers_and_cut_deck(deck)
-    number > 26 ? number = number -26 : number
-    converter(number)
+  def gen_keystream_letter(letter)
+    output_card = "joker"
+    while output_card == "joker"
+      move_jokers_and_cut_deck
+      top_card_value = card_value(@key.first) == "joker" ? 53 : @key.first
+      output_card = card_value(@key[top_card_value])#need to start here with this error.  shouldn't be a string problem
+    end
+    output_card > 26 ? output_card = output_card -26 : output_card
+    output_letter = converter(output_card)
+    output_letter
   end
 
-  def move_jokers_and_cut_deck(deck)
-    move_joker_a(deck)
-    move_joker_b(deck)
-    triple_cut(deck)
-    count_cut(deck)
-    card_value(deck.first) == "joker" ? move_jokers_and_cut_deck(deck) : deck.first
+  def move_jokers_and_cut_deck
+    moved_a = move_joker_a(@key)
+    moved_b = move_joker_b(moved_a)
+    tripled = triple_cut(moved_b)
+    @key = count_cut(tripled)
   end
 
   def card_value(card)
     card.is_a?(String) ? "joker" : card
   end
-
 
   def count_cut(deck)
     bottom_card = deck.pop
@@ -100,14 +105,14 @@ class Solitaire
     position_a = deck.index('A')
     position_b = deck.index('B')
     if position_b > position_a
-      top = deck[position_b+1..53]
-      bottom = deck[0..position_a-1]
-      middle = deck[position_a..position_b]
+      top = deck[((position_b+(1))..53)]
+      bottom = deck[(0..(position_a-1))]
+      middle = deck[(position_a..position_b)]
       top.concat(middle).concat(bottom)
     else
-      top = deck[position_a+1..53]
-      bottom = deck[0..position_b-1]
-      middle = deck[position_b..position_a]
+      top = deck[((position_a+(1))..53)]
+      bottom = deck[(0..(position_b-1))]
+      middle = deck[(position_b..position_a)]
       top.concat(middle).concat(bottom)
     end
   end
