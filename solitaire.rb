@@ -24,14 +24,23 @@ class Solitaire
     clean_message
     convert_message_characters
     generate_keystream_message
-    converted_keystream = convert_characters(keystream_message)
+    convert_keystream_message
     messages_subtracted = subtract_message_numbers(converted_keystream)
     convert_characters(messages_subtracted).map(&:join).join(' ')
   end
 
+  def convert_keystream_message
+    @converted_keystream = convert_characters(keystream_message)
+  end
+
   private
 
-  attr_reader :cleaned_message, :converted_message, :keystream_message
+  attr_reader(
+    :cleaned_message,
+    :converted_message,
+    :converted_keystream,
+    :keystream_message
+  )
 
   def deck
     @deck ||= build_deck
