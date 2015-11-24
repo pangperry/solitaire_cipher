@@ -59,15 +59,17 @@ class Solitaire
   end
 
   def subtract_message_numbers
-    subtracted = zipped_keystream.map do |x, y|
+    @messages_subtracted = subtracted.each_slice(5).to_a
+  end
+
+  def subtracted
+    zipped_keystream.map do |x, y|
       if y <= x
         (y + 26) - x
       else
         y - x
       end
     end
-
-    @messages_subtracted = subtracted.each_slice(5).to_a
   end
 
   def zipped_keystream
