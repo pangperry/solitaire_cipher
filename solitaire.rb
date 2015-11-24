@@ -1,9 +1,11 @@
 class Solitaire
-  attr_reader :deck
-
   def initialize
     @deck = build_deck
     @key = []
+  end
+
+  def deck
+    @deck
   end
 
   def key_deck
