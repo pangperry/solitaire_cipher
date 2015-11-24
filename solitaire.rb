@@ -29,10 +29,6 @@ class Solitaire
     convert_characters(messages_subtracted).map(&:join).join(' ')
   end
 
-  def convert_keystream_message
-    @converted_keystream = convert_characters(keystream_message)
-  end
-
   private
 
   attr_reader(
@@ -101,6 +97,10 @@ class Solitaire
         gen_keystream_letter(letter)
       end
     end
+  end
+
+  def convert_keystream_message
+    @converted_keystream = convert_characters(keystream_message)
   end
 
   def gen_keystream_letter(letter)
