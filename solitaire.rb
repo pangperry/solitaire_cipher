@@ -22,11 +22,15 @@ class Solitaire
     @message = message
 
     clean_message
-    converted_message = convert_message(@cleaned_message)
-    keystream_message = generate_keystream_message(@cleaned_message)
+    converted_message = convert_message(cleaned_message)
+    keystream_message = generate_keystream_message(cleaned_message)
     converted_keystream = convert_message(keystream_message)
     messages_subtracted = subtract_message_numbers(converted_message, converted_keystream)
     convert_characters(messages_subtracted).map(&:join).join(' ')
+  end
+
+  def cleaned_message
+    @cleaned_message
   end
 
   def clean_message
