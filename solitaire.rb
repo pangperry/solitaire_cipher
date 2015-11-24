@@ -74,7 +74,8 @@ class Solitaire
   end
 
   def converter(character)
-    converter = Hash[(("A".."Z").to_a).zip(1..26)]#not very efficient to do this over everytime
+    converter = Hash[(("A".."Z").to_a).zip(1..26)]
+
     if character.is_a?(Integer)
       converter.invert[character]
     else
