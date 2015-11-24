@@ -29,10 +29,6 @@ class Solitaire
     convert_characters(messages_subtracted).map(&:join).join(' ')
   end
 
-  def clean_message
-    @cleaned_message = prepare(@message)
-  end
-
   private
 
   attr_reader :cleaned_message
@@ -45,6 +41,10 @@ class Solitaire
     cards = (1..52).to_a
     cards << "A"
     cards << "B"
+  end
+
+  def clean_message
+    @cleaned_message = prepare(@message)
   end
 
   def subtract_message_numbers(message_numbers, keystream_numbers)
