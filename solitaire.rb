@@ -3,10 +3,6 @@ class Solitaire
     @key = []
   end
 
-  def deck
-    @deck ||= build_deck
-  end
-
   def key_deck
     @key = deck.shuffle!
   end
@@ -32,6 +28,10 @@ class Solitaire
   end
 
   private
+
+  def deck
+    @deck ||= build_deck
+  end
 
   def subtract_message_numbers(message_numbers, keystream_numbers)
     subtracted = keystream_numbers.flatten.zip(message_numbers.flatten).map do |x, y|
