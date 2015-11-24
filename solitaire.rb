@@ -33,6 +33,12 @@ class Solitaire
     @deck ||= build_deck
   end
 
+  def build_deck
+    cards = (1..52).to_a
+    cards << "A"
+    cards << "B"
+  end
+
   def subtract_message_numbers(message_numbers, keystream_numbers)
     subtracted = keystream_numbers.flatten.zip(message_numbers.flatten).map do |x, y|
       y <= x ? (y + 26) - x : y - x
@@ -136,11 +142,5 @@ class Solitaire
     else
       deck.insert((position+2),deck.delete_at(position))
     end
-  end
-
-  def build_deck
-    cards = (1..52).to_a
-    cards << "A"
-    cards << "B"
   end
 end
