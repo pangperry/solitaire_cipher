@@ -87,7 +87,11 @@ class Solitaire
   end
 
   def generate_keystream_message
-    @keystream_message = cleaned_message.map {|group| group.map {|letter| gen_keystream_letter(letter) }}
+    @keystream_message = cleaned_message.map do |group|
+      group.map do |letter|
+        gen_keystream_letter(letter)
+      end
+    end
   end
 
   def gen_keystream_letter(letter)
