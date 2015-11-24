@@ -82,7 +82,11 @@ class Solitaire
   end
 
   def convert_characters(grouped_message)
-    grouped_message.map {|group| group.map { |character| converter(character) } }
+    grouped_message.map do |group|
+      group.map do |character|
+        converter(character)
+      end
+    end
   end
 
   def converter(character)
