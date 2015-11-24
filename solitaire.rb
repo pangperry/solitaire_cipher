@@ -1,11 +1,10 @@
 class Solitaire
   def initialize
-    @deck = build_deck
     @key = []
   end
 
   def deck
-    @deck
+    @deck ||= build_deck
   end
 
   def key_deck
