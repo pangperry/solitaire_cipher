@@ -59,8 +59,14 @@ class Solitaire
   end
 
   def subtract_message_numbers
-    subtracted = converted_keystream.flatten.zip(converted_message.flatten).map do |x, y|
-      y <= x ? (y + 26) - x : y - x
+    zipped = converted_keystream.flatten.zip(converted_message.flatten)
+
+    subtracted = zipped.map do |x, y|
+      if y <= x
+        (y + 26) - x
+      else
+        y - x
+      end
     end
 
     @messages_subtracted = subtracted.each_slice(5).to_a
