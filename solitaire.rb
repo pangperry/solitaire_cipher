@@ -25,7 +25,7 @@ class Solitaire
     convert_message_characters
     generate_keystream_message
     convert_keystream_message
-    messages_subtracted = subtract_message_numbers(converted_keystream)
+    subtract_message_numbers
     convert_characters(messages_subtracted).map(&:join).join(' ')
   end
 
@@ -36,7 +36,8 @@ class Solitaire
     :converted_message,
     :converted_keystream,
     :keystream_message,
-    :message
+    :message,
+    :messages_subtracted,
   )
 
   def deck
@@ -57,11 +58,12 @@ class Solitaire
     @converted_message = convert_characters(cleaned_message)
   end
 
-  def subtract_message_numbers(keystream_numbers)
-    subtracted = keystream_numbers.flatten.zip(converted_message.flatten).map do |x, y|
+  def subtract_message_numbers
+    subtracted = converted_keystream.flatten.zip(converted_message.flatten).map do |x, y|
       y <= x ? (y + 26) - x : y - x
     end
-    subtracted.each_slice(5).to_a
+
+    @messages_subtracted = subtracted.each_slice(5).to_a
   end
 
   def add_message_numbers(message_numbers, keystream_numbers)
