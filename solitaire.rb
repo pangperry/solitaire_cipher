@@ -29,15 +29,13 @@ class Solitaire
     convert_characters(messages_subtracted).map(&:join).join(' ')
   end
 
-  def cleaned_message
-    @cleaned_message
-  end
-
   def clean_message
     @cleaned_message = prepare(@message)
   end
 
   private
+
+  attr_reader :cleaned_message
 
   def deck
     @deck ||= build_deck
