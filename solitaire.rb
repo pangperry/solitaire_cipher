@@ -35,7 +35,8 @@ class Solitaire
     :cleaned_message,
     :converted_message,
     :converted_keystream,
-    :keystream_message
+    :keystream_message,
+    :message
   )
 
   def deck
@@ -49,7 +50,7 @@ class Solitaire
   end
 
   def clean_message
-    @cleaned_message = prepare(@message)
+    @cleaned_message = prepare(message)
   end
 
   def convert_message_characters
