@@ -23,7 +23,7 @@ class Solitaire
 
     clean_message
     convert_message_characters
-    keystream_message = generate_keystream_message(cleaned_message)
+    keystream_message = generate_keystream_message
     converted_keystream = convert_characters(keystream_message)
     messages_subtracted = subtract_message_numbers(converted_keystream)
     convert_characters(messages_subtracted).map(&:join).join(' ')
@@ -86,8 +86,8 @@ class Solitaire
     grouped_message
   end
 
-  def generate_keystream_message(prepared_message)
-    keystream_message = prepared_message.map {|group| group.map {|letter| gen_keystream_letter(letter) }}
+  def generate_keystream_message
+    @keystream_message = cleaned_message.map {|group| group.map {|letter| gen_keystream_letter(letter) }}
   end
 
   def gen_keystream_letter(letter)
