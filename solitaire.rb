@@ -7,11 +7,11 @@ class Solitaire
   end
 
   def key_deck
-    @key = @deck.shuffle!
+    @key = deck.shuffle!
   end
 
   def encrypt_message(message)
-    @key = @deck.dup
+    @key = deck.dup
     cleaned_message =  prepare(message)
     converted_message = convert_message(cleaned_message)
     keystream_message = generate_keystream_message(cleaned_message)
@@ -21,7 +21,7 @@ class Solitaire
   end
 
   def decrypt_message(message)
-    @key = @deck.dup
+    @key = deck.dup
     cleaned_message =  prepare(message)
     converted_message = convert_message(cleaned_message)
     keystream_message = generate_keystream_message(cleaned_message)
