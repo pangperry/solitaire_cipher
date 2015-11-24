@@ -22,7 +22,7 @@ class Solitaire
     @message = message
 
     clean_message
-    converted_message = convert_characters(cleaned_message)
+    convert_message_characters
     keystream_message = generate_keystream_message(cleaned_message)
     converted_keystream = convert_characters(keystream_message)
     messages_subtracted = subtract_message_numbers(converted_message, converted_keystream)
@@ -31,7 +31,7 @@ class Solitaire
 
   private
 
-  attr_reader :cleaned_message
+  attr_reader :cleaned_message, :converted_message
 
   def deck
     @deck ||= build_deck
@@ -45,6 +45,10 @@ class Solitaire
 
   def clean_message
     @cleaned_message = prepare(@message)
+  end
+
+  def convert_message_characters
+    @converted_message = convert_characters(cleaned_message)
   end
 
   def subtract_message_numbers(message_numbers, keystream_numbers)
