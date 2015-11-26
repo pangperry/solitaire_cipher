@@ -9,12 +9,14 @@ class Solitaire
 
   def encrypt_message(message)
     @key = deck.dup
-    cleaned_message =  prepare(message)
-    converted_message = convert_characters(cleaned_message)
-    keystream_message = generate_keystream_message(cleaned_message)
-    converted_keystream = convert_characters(keystream_message)
-    added_messages = add_message_numbers(converted_message, converted_keystream)
-    convert_characters(added_messages).map(&:join).join(' ')
+    @message = message
+
+    clean_message
+    convert_message_characters
+    generate_keystream_message
+    convert_keystream_message
+    add_message_numbers
+    convert_characters(messages_added).map(&:join).join(' ')
   end
 
   def decrypt_message(message)
@@ -37,6 +39,7 @@ class Solitaire
     :converted_keystream,
     :keystream_message,
     :message,
+    :messages_added,
     :messages_subtracted,
   )
 
@@ -58,6 +61,20 @@ class Solitaire
     @converted_message = convert_characters(cleaned_message)
   end
 
+  def add_message_numbers
+    @messages_added = added.each_slice(5).to_a
+  end
+
+  def added
+    zipped_keystream.map do |x, y|
+      if (x + y) <= 26
+        x + y
+      else
+        (x + y) - 26
+      end
+    end
+  end
+
   def subtract_message_numbers
     @messages_subtracted = subtracted.each_slice(5).to_a
   end
@@ -74,11 +91,6 @@ class Solitaire
 
   def zipped_keystream
     converted_keystream.flatten.zip(converted_message.flatten)
-  end
-
-  def add_message_numbers(message_numbers, keystream_numbers)
-    added = [message_numbers.flatten, keystream_numbers.flatten].transpose.map {|x| x.reduce(:+) }
-    (added.map {|num| num>26 ? num - 26: num }).each_slice(5).to_a
   end
 
   def convert_characters(grouped_message)

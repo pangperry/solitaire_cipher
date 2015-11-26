@@ -11,3 +11,14 @@ describe Solitaire, '#decrypt_message' do
     expect(decrypted_message).to eq expected_output
   end
 end
+
+describe Solitaire, '#encrypt_message' do
+  it 'successfully encrypts a message' do
+    message = 'Your cipher is working'
+    expected_output = 'CLEPK HHNIY CFPWH FDFEH'
+
+    encrypted_message  = Solitaire.new.encrypt_message(message)
+
+    expect(encrypted_message).to eq expected_output
+  end
+end
