@@ -1,15 +1,11 @@
 class Solitaire
-  def initialize
-    @key = []
-  end
-
-  def key_deck
-    @key = deck.shuffle!
-  end
-
-  def encrypt_message(message)
-    @key = deck.dup
+  def initialize(message)
     @message = message
+  end
+
+  def encrypt_message
+    @key = deck.dup
+    @message
 
     clean_message
     convert_message_characters
@@ -19,9 +15,9 @@ class Solitaire
     convert_characters(messages_added).map(&:join).join(' ')
   end
 
-  def decrypt_message(message)
+  def decrypt_message
     @key = deck.dup
-    @message = message
+    @message
 
     clean_message
     convert_message_characters
@@ -51,14 +47,49 @@ class Solitaire
     cards = (1..52).to_a
     cards << "A"
     cards << "B"
+    cards
   end
 
   def clean_message
     @cleaned_message = prepare(message)
   end
 
+  def prepare(message)
+    grouped_caps = substitute_chars(message).chars.each_slice(5).to_a
+    add_x(grouped_caps)
+  end
+
+  def substitute_chars(message)
+    message.gsub(/\p{^Alnum}/, '').upcase
+  end
+
+  def add_x(grouped_message)
+    grouped_message.last << "X" until grouped_message.last.count % 5 == 0
+    grouped_message
+  end
+
   def convert_message_characters
     @converted_message = convert_characters(cleaned_message)
+  end
+
+  def convert_characters(grouped_message)
+    grouped_message.map do |group|
+      group.map do |character|
+        converter(character)
+      end
+    end
+  end
+
+  def converter(character)
+    if character.is_a?(Integer)
+      converter_hash.invert[character]
+    else
+      converter_hash[character]
+    end
+  end
+
+  def converter_hash
+    Hash[(("A".."Z").to_a).zip(1..26)]
   end
 
   def add_message_numbers
@@ -93,38 +124,8 @@ class Solitaire
     converted_keystream.flatten.zip(converted_message.flatten)
   end
 
-  def convert_characters(grouped_message)
-    grouped_message.map do |group|
-      group.map do |character|
-        converter(character)
-      end
-    end
-  end
-
-  def converter(character)
-    if character.is_a?(Integer)
-      converter_hash.invert[character]
-    else
-      converter_hash[character]
-    end
-  end
-
-  def converter_hash
-    Hash[(("A".."Z").to_a).zip(1..26)]
-  end
-
-  def prepare(message)
-    grouped_caps = substitute_chars(message).chars.each_slice(5).to_a
-    add_x(grouped_caps)
-  end
-
-  def substitute_chars(message)
-    message.gsub(/\p{^Alnum}/, '').upcase
-  end
-
-  def add_x(grouped_message)
-    grouped_message.last << "X" until grouped_message.last.count % 5 == 0
-    grouped_message
+  def convert_keystream_message
+    @converted_keystream = convert_characters(keystream_message)
   end
 
   def generate_keystream_message
@@ -133,10 +134,6 @@ class Solitaire
         gen_keystream_letter(letter)
       end
     end
-  end
-
-  def convert_keystream_message
-    @converted_keystream = convert_characters(keystream_message)
   end
 
   def gen_keystream_letter(letter)
