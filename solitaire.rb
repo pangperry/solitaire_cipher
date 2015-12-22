@@ -74,13 +74,6 @@ class Solitaire
     @x_added= ary
   end
 
-  def decrypt
-    convert_encrypted_message
-    #convert_keystream_to_numbers
-    #subtract_message_numbers
-    #convert_to_letters #refactor existing method
-  end
-
 #keystream------------------------
 
   def convert_keystream_to_numbers
