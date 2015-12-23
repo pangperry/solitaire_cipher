@@ -81,20 +81,8 @@ class Solitaire
   end
 
   def keystream
-   @keystream_letters ||= generate_keystream
-  end
-
-  def generate_keystream
-    build_deck
     get_keystream_length
-    generate_letters
-  end
-
-  def build_deck
-    new_deck = (1..52).to_a
-    new_deck << 'A'
-    new_deck << 'B'
-    @deck ||= new_deck
+    @keystream_letters ||= generate_keystream
   end
 
   def get_keystream_length
@@ -104,6 +92,18 @@ class Solitaire
       else
         length_no_spaces(sanitized_message)
       end
+  end
+
+  def generate_keystream
+    build_deck
+    generate_letters
+  end
+
+  def build_deck
+    new_deck = (1..52).to_a
+    new_deck << 'A'
+    new_deck << 'B'
+    @deck ||= new_deck
   end
 
   def length_no_spaces(str)
