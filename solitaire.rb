@@ -56,7 +56,7 @@ class Solitaire
   end
 
   def discard_non_alpha_and_capitalize
-    @message.gsub(/\W+|\d+/, '').upcase
+    message.gsub(/\W+|\d+/, '').upcase
   end
 
   def group_message
