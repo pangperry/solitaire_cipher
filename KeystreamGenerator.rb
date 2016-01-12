@@ -32,7 +32,11 @@ class KeystreamGenerator
 
     until letters_added == keystream_length do
       new_keystream << cut_deck_and_output_letter
-      new_keystream.last == nil ? letters_added : letters_added += 1
+      if new_keystream.last == nil
+        letters_added
+      else
+        letters_added += 1
+      end
     end
 
     new_keystream.compact.join
