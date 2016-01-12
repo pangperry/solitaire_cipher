@@ -1,19 +1,23 @@
 class KeystreamGenerator
 
-  attr_reader :keystream_length, :deck
+  attr_reader :keystream_length
 
   def initialize(keystream_length)
     @keystream_length = keystream_length
   end
 
   def generate_keystream
-    @deck = build_deck
+    deck
     generate_letters
   end
 
   private
 
   NUMBER_CONVERTER = Hash[(1..26).zip ('A'..'Z')]
+
+  def deck
+    @deck ||= build_deck
+  end
 
   def build_deck
     new_deck = (1..52).to_a
