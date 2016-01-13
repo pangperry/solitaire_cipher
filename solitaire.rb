@@ -32,7 +32,6 @@ class Solitaire
     :keystream_letters,
     :sanitized_message,
     :converted_message,
-    :converted_keystream,
     :added_message_numbers,
     :cleaned_message,
     :grouped_message,
