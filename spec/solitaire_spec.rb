@@ -1,23 +1,23 @@
 require 'spec_helper'
-require_relative '../solitaire-v1'
+require_relative '../solitaire'
 
-describe Solitaire, '#encrypt_message' do
-  it 'successfully encrypts a message' do
+describe Solitaire,"#encrypt" do
+  it 'successfully encrypts message with unkeyed deck' do
     message = 'Code in Ruby, live longer!'
     expected_output = 'GLNCQ MJAFF FVOMB JIYCB'
 
-    encrypted_message = Solitaire.new(message).encrypt_message
+    encrypted_message = Solitaire.new(message: message).encrypt
 
     expect(encrypted_message).to eq expected_output
   end
 end
 
-describe Solitaire, '#decrypt_message' do
-  it 'successfully decrypts a message' do
-    encrypted_message = 'CLEPK HHNIY CFPWH FDFEH'
-    expected_output = 'YOURC IPHER ISWOR KINGX'
+describe Solitaire, "#decrypt" do
+  it 'successfully decrypts message' do
+    encrypted_message = 'GLNCQ MJAFF FVOMB JIYCB'
+    expected_output = "CODEI NRUBY LIVEL ONGER"
 
-    decrypted_message = Solitaire.new(encrypted_message).decrypt_message
+    decrypted_message = Solitaire.new(encrypted_message: encrypted_message).decrypt
 
     expect(decrypted_message).to eq expected_output
   end
