@@ -1,6 +1,8 @@
 require_relative 'keystreamgenerator'
 
 class Solitaire
+  LETTER_CONVERTER = Hash[('A'..'Z').zip (1..26)]
+  NUMBER_CONVERTER = LETTER_CONVERTER.invert
 
   def initialize(opts={})
     @message           = opts[:message]
@@ -23,9 +25,6 @@ class Solitaire
   end
 
   private
-
-  LETTER_CONVERTER = Hash[('A'..'Z').zip (1..26)]
-  NUMBER_CONVERTER = Hash[(1..26).zip ('A'..'Z')]
 
   attr_reader(
     :message,
