@@ -29,7 +29,6 @@ class Solitaire
   attr_reader(
     :message,
     :encrypted_message,
-    :keystream_letters,
     :sanitized_message,
     :converted_message,
     :added_message_numbers,
@@ -76,9 +75,8 @@ class Solitaire
   end
 
   def keystream
-    keystream_length
     generator = KeystreamGenerator.new(keystream_length)
-    @keystream_letters = generator.generate_keystream
+    generator.generate_keystream
   end
 
   def keystream_length
